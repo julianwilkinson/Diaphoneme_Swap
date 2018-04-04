@@ -1,0 +1,42 @@
+:- ['PhonesAndClasses.swipl'].
+:- ['dialects.swipl'].
+:- ['wellsWords.swipl'].
+:- ['saeWords.swipl'].
+
+
+
+% Test Functions
+saeToOthers(Original_Word, ['sae'], Changed_Word, ToDialect) :-
+	saeWord(Original_Word),
+	dialect(ToDialect),
+	diaphonemeSwap(Original_Word, ['sae'], Changed_Word, [ToDialect]).
+
+wellsToOthers(Original_Word, ['wells_index'], Changed_Word, ToDialect) :-
+	wellsWord(Original_Word),
+	dialect(ToDialect),
+	diaphonemeSwap(Original_Word, ['wells_index'], Changed_Word, [ToDialect]).
+
+% Translation Functions
+% Base Case
+diaphonemeSwap([], _, [], _).
+
+% consonant
+diaphonemeSwap([Original_Phoneme|Rest], FromDialect, [Original_Phoneme|ToAdd], ToDialect) :-
+	cns(Original_Phoneme), %Original_Phoneme is consonant
+	!,
+	diaphonemeSwap(Rest, FromDialect, ToAdd, ToDialect).
+
+% diaphonemic vowel cluster
+diaphonemeSwap([Original_Phoneme|Rest], FromDialect, [Changed_Phoneme|ToAdd], ToDialect) :-
+	not(cns(Original_Phoneme)),
+	diaphoneme(Original_Phoneme, FromDialect, Wells_Index, ['wells_index']),
+	diaphoneme(Changed_Phoneme, ToDialect, Wells_Index, ['wells_index']),
+	diaphonemeSwap(Rest, FromDialect, ToAdd, ToDialect).
+
+% Non diaphonemic vowel or vowel cluster
+diaphonemeSwap([Original_Phoneme|Rest], FromDialect, [Original_Phoneme|ToAdd], ToDialect) :-
+	not(cns(Original_Phoneme)),
+	not(diaphoneme(Original_Phoneme, FromDialect, Wells_Index, ['wells_index']);
+		diaphoneme(_, ToDialect, Wells_Index, ['wells_index'])),
+	!,
+	diaphonemeSwap(Rest, FromDialect, ToAdd, ToDialect).
