@@ -13,6 +13,6 @@ diaphonemeSwap can be used to translate with manual input. Here's an example:
 ```Prolog
 diaphonemeSwap([['b'],[['ɑ'],['ː']],['θ']],['rp'],Changed_Word,['sae']).
 ```
-This will return bæθ, in addition to bɑθ, and bɑrθ as the program will map it to possible corresponding vowels in SAE (this is discussed in the shortcomings in the write-up.)
+This will return bæθ, in addition to bɑθ, and bɑrθ as the program will map it to possible corresponding vowels in SAE.
 
 Predicate makers written in python are also included that can be used to test other dialects or words without writing them manually in Prolog.
